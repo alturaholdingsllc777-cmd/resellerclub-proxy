@@ -1,0 +1,23 @@
+{
+  "name": "resellerclub-proxy",
+  "version": "0.1.0",
+  "description": "AtlasX Media secure proxy and VPS deployment starter for Altura Holdings LLC.",
+  "main": "src/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js",
+    "health": "node -e \"fetch('http://localhost:'+(process.env.PORT||3000)+'/health').then(r=>r.json()).then(console.log).catch(e=>{console.error(e);process.exit(1)})\""
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
