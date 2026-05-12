@@ -7,7 +7,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 apt update
-apt install -y ca-certificates curl git ufw
+apt install -y ca-certificates curl git nginx ufw
 
 if ! command -v docker >/dev/null 2>&1; then
   install -m 0755 -d /etc/apt/keyrings
@@ -23,7 +23,8 @@ systemctl enable docker
 systemctl start docker
 
 ufw allow OpenSSH || true
-ufw allow 3000/tcp || true
+ufw allow 80/tcp || true
+ufw allow 443/tcp || true
 ufw --force enable || true
 
-echo "Bootstrap complete. Next: copy .env.example to .env, fill secrets, then run sudo ./scripts/deploy.sh"
+echo "Bootstrap complete. Next: copy .env.example to .env, fill secrets, then run sudo ./scripts/go-live.sh"

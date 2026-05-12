@@ -51,7 +51,13 @@ openssl rand -hex 32
 
 ## 2. Start n8n
 
-Run the normal proxy plus the n8n automation profile:
+Run the production go-live script, which starts the normal proxy plus the n8n automation profile:
+
+```bash
+sudo ./scripts/go-live.sh
+```
+
+If you only want the raw Docker Compose command for troubleshooting:
 
 ```bash
 docker compose --profile automation up -d --build

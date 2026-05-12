@@ -3,19 +3,30 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-if [ ! -f .env ]; then
-  echo "Missing .env. Run: cp .env.example .env and fill values on the VPS."
-  exit 1
+WITH_N8N=0
+if [ "${1:-}" = "--with-n8n" ] || [ "${1:-}" = "--automation" ]; then
+  WITH_N8N=1
 fi
 
-docker compose build
-docker compose up -d
+if [ "$WITH_N8N" -eq 1 ]; then
+  ./scripts/validate-env.sh --with-n8n
+  COMPOSE=(docker compose --profile automation)
+else
+  ./scripts/validate-env.sh
+  COMPOSE=(docker compose)
+fi
+
+"${COMPOSE[@]}" build
+"${COMPOSE[@]}" up -d
 sleep 3
-docker compose ps
+"${COMPOSE[@]}" ps
 curl -fsS http://localhost:3000/health || {
   echo "Health check failed. Logs:"
-  docker compose logs --tail=80
+  "${COMPOSE[@]}" logs --tail=80
   exit 1
 }
 
 echo "Deploy complete. Service is running on port 3000."
+if [ "$WITH_N8N" -eq 1 ]; then
+  echo "n8n is running on localhost port 5678 for Nginx to publish securely."
+fi

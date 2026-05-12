@@ -14,9 +14,10 @@ Read:
 docs/RESELLERCLUB_VPS_QUICKSTART.md
 ```
 
-For n8n automation, read:
+For production go-live and n8n automation, read:
 
 ```text
+docs/GO_LIVE_CHECKLIST.md
 docs/N8N_RESELLERCLUB_AUTOMATION.md
 ```
 
@@ -47,6 +48,14 @@ curl 'http://localhost:3000/api/domain/check?domain=example&tlds=com,net' \
 cp .env.example .env
 docker compose build
 docker compose up -d
+```
+
+## Production Go Live
+
+```bash
+cp .env.example .env
+# Fill .env on the VPS with production secrets first.
+sudo ./scripts/go-live.sh
 ```
 
 ## Security
