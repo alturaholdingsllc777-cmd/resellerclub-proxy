@@ -1,0 +1,117 @@
+{
+  "name": "ResellerClub Domain Lead Check",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "resellerclub-domain-lead",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "4a5b599d-51b6-431a-8b51-981c5c397ec3",
+      "name": "Domain Lead Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -520,
+        0
+      ],
+      "webhookId": "resellerclub-domain-lead"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$env.PROXY_PUBLIC_BASE_URL || 'http://resellerclub-proxy:3000'}}/api/domain/check",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-proxy-secret",
+              "value": "={{$env.PROXY_SECRET}}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "domain",
+              "value": "={{$json.body.domain || $json.body['domain-name']}}"
+            },
+            {
+              "name": "tlds",
+              "value": "={{$json.body.tlds || 'com'}}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "9c77a3ed-e8d2-4f89-8818-75b566ec99c9",
+      "name": "Check ResellerClub Domain Availability",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, lead: $node['Domain Lead Webhook'].json.body, availability: $json } }}",
+        "options": {}
+      },
+      "id": "1f8e6e0e-c921-4cff-a2b0-d536d9c6c519",
+      "name": "Return Availability Result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        20,
+        0
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Domain Lead Webhook": {
+      "main": [
+        [
+          {
+            "node": "Check ResellerClub Domain Availability",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check ResellerClub Domain Availability": {
+      "main": [
+        [
+          {
+            "node": "Return Availability Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c76a482d-e9bc-43aa-91ec-b39b2f0edc61",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    {
+      "name": "resellerclub"
+    },
+    {
+      "name": "lead-intake"
+    }
+  ]
+}

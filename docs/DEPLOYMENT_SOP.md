@@ -29,6 +29,13 @@ UPSTREAM_TIMEOUT_MS=20000
 RESELLERCLUB_BASE_URL=https://httpapi.com/api
 RC_RESELLER_ID=YOUR_RESELLER_ID
 RC_API_KEY=YOUR_API_KEY
+RESELLERCLUB_DOMAINCHECK_BASE_URL=https://domaincheck.httpapi.com/api
+N8N_HOST=automation.atlasx.media
+N8N_PROTOCOL=https
+N8N_WEBHOOK_URL=https://automation.atlasx.media/
+N8N_ENCRYPTION_KEY=CHANGE_ME_LONG_RANDOM_ENCRYPTION_KEY
+N8N_TIMEZONE=America/New_York
+PROXY_PUBLIC_BASE_URL=http://resellerclub-proxy:3000
 EOF
 chmod 600 .env
 ```
@@ -36,7 +43,7 @@ chmod 600 .env
 ## Deploy
 
 ```bash
-sudo ./scripts/deploy.sh
+sudo ./scripts/go-live.sh
 ```
 
 ## Updates
@@ -44,7 +51,7 @@ sudo ./scripts/deploy.sh
 ```bash
 cd /opt/atlasx-media
 git pull origin main
-sudo ./scripts/deploy.sh
+sudo ./scripts/go-live.sh
 ```
 
 ## SSL After DNS Propagates

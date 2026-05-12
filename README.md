@@ -14,6 +14,13 @@ Read:
 docs/RESELLERCLUB_VPS_QUICKSTART.md
 ```
 
+For production go-live and n8n automation, read:
+
+```text
+docs/GO_LIVE_CHECKLIST.md
+docs/N8N_RESELLERCLUB_AUTOMATION.md
+```
+
 ## Local Run
 
 ```bash
@@ -28,6 +35,13 @@ Health check:
 curl http://localhost:3000/health
 ```
 
+Domain availability proxy check for n8n:
+
+```bash
+curl 'http://localhost:3000/api/domain/check?domain=example&tlds=com,net' \
+  -H "x-proxy-secret: $PROXY_SECRET"
+```
+
 ## Docker Run
 
 ```bash
@@ -36,9 +50,18 @@ docker compose build
 docker compose up -d
 ```
 
+## Production Go Live
+
+```bash
+cp .env.example .env
+# Fill .env on the VPS with production secrets first.
+sudo ./scripts/go-live.sh
+```
+
 ## Security
 
 - Never commit `.env`.
+- Rotate any n8n JWT/API token that was pasted into a chat, ticket, or GitHub issue.
 - Use a strong `PROXY_SECRET`.
 - Keep ResellerClub credentials only on the VPS or in secure deployment secrets.
 - Do not paste production secrets into GitHub issues or public files.

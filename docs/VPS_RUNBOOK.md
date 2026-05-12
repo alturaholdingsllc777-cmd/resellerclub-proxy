@@ -26,7 +26,7 @@ docker compose restart
 ```bash
 cd /opt/atlasx-media
 git pull origin main
-sudo ./scripts/deploy.sh
+sudo ./scripts/go-live.sh
 ```
 
 ## Backup
@@ -50,7 +50,7 @@ sudo systemctl reload nginx
 |---|---|
 | Container down | `docker compose logs --tail=100` |
 | Health check fails | Confirm `.env` exists and container is running |
-| Port blocked | `sudo ufw allow 3000/tcp` for test, 80/443 for production |
+| Port blocked | Keep 80/443 open publicly; n8n binds to localhost port 5678 behind Nginx |
 | DNS not working | Confirm A records point to VPS IP |
 | SSH input difficult | Use copy/paste commands only; avoid nano/vim |
 | Secret wrong | Update `.env`, then run `docker compose restart` |
@@ -61,5 +61,5 @@ sudo systemctl reload nginx
 cd /opt/atlasx-media
 git log --oneline -5
 git checkout COMMIT_SHA
-sudo ./scripts/deploy.sh
+sudo ./scripts/go-live.sh
 ```
