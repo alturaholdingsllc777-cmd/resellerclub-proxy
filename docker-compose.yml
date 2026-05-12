@@ -12,3 +12,33 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: atlasx-n8n
+    restart: unless-stopped
+    profiles:
+      - automation
+    env_file:
+      - .env
+    environment:
+      N8N_HOST: ${N8N_HOST:-automation.atlasx.media}
+      N8N_PORT: 5678
+      N8N_PROTOCOL: ${N8N_PROTOCOL:-https}
+      WEBHOOK_URL: ${N8N_WEBHOOK_URL:-https://automation.atlasx.media/}
+      GENERIC_TIMEZONE: ${N8N_TIMEZONE:-America/New_York}
+      TZ: ${N8N_TIMEZONE:-America/New_York}
+      N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:-CHANGE_ME_LONG_RANDOM_ENCRYPTION_KEY}
+      PROXY_PUBLIC_BASE_URL: ${PROXY_PUBLIC_BASE_URL:-http://resellerclub-proxy:3000}
+      PROXY_SECRET: ${PROXY_SECRET:-CHANGE_ME_STRONG_RANDOM_SECRET}
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      resellerclub-proxy:
+        condition: service_healthy
+
+volumes:
+  n8n_data:
